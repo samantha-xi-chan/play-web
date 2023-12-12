@@ -43,6 +43,12 @@
     <div id="result"></div>
 
     <script>
+        function getCurrentTimestamp() {
+            return new Date().getTime();
+        }
+
+        document.getElementById('timestamp').value = getCurrentTimestamp();
+
         function timestampToDatetime() {
             const timestamp = document.getElementById('timestamp').value;
             const date = new Date(parseInt(timestamp));
@@ -60,4 +66,3 @@
     </script>
 </body>
 </html>
-
