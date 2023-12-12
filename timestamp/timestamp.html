@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 时间戳、时间 转换  </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, button {
+            margin: 10px;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h2> 时间戳、时间 转换 </h2>
+
+    <label for="timestamp">时间戳（毫秒）：</label>
+    <input type="text" id="timestamp" placeholder="输入时间戳">
+
+    <label for="datetime">时间：</label>
+    <input type="datetime-local" id="datetime">
+
+    <button onclick="timestampToDatetime()">时间戳转时间</button>
+    <button onclick="datetimeToTimestamp()">时间转时间戳</button>
+
+    <div id="result"></div>
+
+    <script>
+        function timestampToDatetime() {
+            const timestamp = document.getElementById('timestamp').value;
+            const date = new Date(parseInt(timestamp));
+            const formattedDate = date.toISOString().slice(0, 19).replace('T', ' ');
+            document.getElementById('datetime').value = formattedDate;
+            document.getElementById('result').innerText = `转换结果：${formattedDate}`;
+        }
+
+        function datetimeToTimestamp() {
+            const datetime = document.getElementById('datetime').value;
+            const timestamp = new Date(datetime).getTime();
+            document.getElementById('timestamp').value = timestamp;
+            document.getElementById('result').innerText = `转换结果：${timestamp}`;
+        }
+    </script>
+</body>
+</html>
+
