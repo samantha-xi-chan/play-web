@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Vue 3 绘制 </title>
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 5px solid #ccc;
+            border-top: 5px solid #000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <canvas ref="myCanvas" width="400" height="400" style="border:1px solid #c1b8b8;">
+            Your browser does not support the HTML canvas tag.
+        </canvas>
+
+        <div class="spinner"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    canvas: null,
+                    ctx: null,
+                    points: [
+                        { name: "A", x: 150, y: 110, type: "solid" },
+                        { name: "B", x:  70, y: 210, type: "solid" },
+                        { name: "C", x: 230, y: 210, type: "solid" },
+                        { name: "D", x: 150, y: 320, type: "hollow" },
+                    ],
+                    edges: [
+                        { from: "A", to: "B", style: "solid" },
+                        { from: "A", to: "C", style: "solid" },
+                        { from: "B", to: "D", style: "solid" },
+                        { from: "C", to: "D", style: "dashed" },
+                    ],
+                    currentColor: "#FF0000", // 初始颜色为红色
+                    currentLineStyle: "solid", // 新增变量来控制当前线条样式
+                };
+            },
+            mounted() {
+                this.canvas = this.$refs.myCanvas;
+                this.ctx = this.canvas.getContext("2d");
+
+                this.draw();
+
+                setInterval(() => {
+                    this.currentColor = (this.currentColor === "#FF0000" ? "#00FF00" : "#FF0000");
+                    this.draw();
+                }, 1000); // 每1000毫秒切换一次颜色
+
+                setInterval(() => {
+                    this.currentLineStyle = (this.currentLineStyle === "solid" ? "dashed" : "solid");
+                    this.draw();
+                }, 1500); // 每1500毫秒切换一次线条样式
+            },
+            methods: {
+                draw() {
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                    this.edges.forEach((edge) => {
+                        const fromPoint = this.points.find((point) => point.name === edge.from);
+                        const toPoint = this.points.find((point) => point.name === edge.to);
+
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(fromPoint.x, fromPoint.y);
+                        this.ctx.lineTo(toPoint.x, toPoint.y);
+
+                        // 根据currentLineStyle变量来设置线条样式
+                        if (this.currentLineStyle === "solid") {
+                            this.ctx.setLineDash([]);
+                        } else {
+                            this.ctx.setLineDash([5, 5]);
+                        }
+
+                        this.ctx.strokeStyle = "#000000";
+                        this.ctx.stroke();
+                    });
+
+                    this.points.forEach((point) => {
+                        this.ctx.beginPath();
+                        this.ctx.arc(point.x, point.y, 4, 0, 2 * Math.PI);
+
+                        if (point.type === "solid") {
+                            this.ctx.fillStyle = this.currentColor;
+                            this.ctx.fill();
+                        } else {
+                            this.ctx.fillStyle = "#FFFFFF";
+                            this.ctx.fill();
+                            this.ctx.strokeStyle = this.currentColor;
+                            this.ctx.stroke();
+                        }
+
+                        this.ctx.font = "12px Arial";
+                        this.ctx.fillStyle = "black";
+                        this.ctx.fillText(point.name, point.x + 10, point.y - 10);
+                    });
+                },
+            },
+        });
+
+        app.mount('#app');
+    </script>
+</body>
+</html>

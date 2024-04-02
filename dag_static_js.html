@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> 图形 绘制 </title>
+    <style>
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      
+        .spinner {
+          width: 20px;
+          height: 20px;
+          border: 5px solid #ccc;
+          border-top: 5px solid #000;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+      </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="400" height="400" style="border:1px solid #c1b8b8;">
+        Your browser does not support the HTML canvas tag.
+    </canvas>
+
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // 定义点，包括名称、坐标和类型（实心或空心）
+        var points = [
+            { name: "A", x: 150, y: 110, type: "solid" },
+            { name: "B", x:  70, y: 210, type: "solid" },
+            { name: "C", x: 230, y: 210, type: "solid" },
+            { name: "D", x: 150, y: 320, type: "hollow" },
+            // 可以继续添加更多点
+        ];
+
+        // 定义边，通过点的名称来指定连接的点，包括样式（实线或虚线）
+        var edges = [
+            { from: "A", to: "B", style: "solid" },
+            { from: "A", to: "C", style: "solid" },
+            { from: "B", to: "D", style: "solid" },
+            { from: "C", to: "D", style: "dashed" },
+            // 根据需要定义更多边
+        ];
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // 清除之前的绘图
+
+            // 绘制边
+            edges.forEach(function(edge) {
+                var fromPoint = points.find(point => point.name === edge.from);
+                var toPoint = points.find(point => point.name === edge.to);
+
+                ctx.beginPath();
+                ctx.moveTo(fromPoint.x, fromPoint.y);
+                ctx.lineTo(toPoint.x, toPoint.y);
+
+                if (edge.style === "solid") {
+                    ctx.setLineDash([]); // 设置为实线
+                } else {
+                    ctx.setLineDash([2, 2]); // 设置为虚线，数字表示虚线的模式，例如[5, 5]表示画5像素，空5像素
+                }
+
+                ctx.strokeStyle = "#000000";
+                ctx.stroke();
+            });
+
+            // 绘制点及其名称
+            points.forEach(function(point) {
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, 4, 0, 2 * Math.PI);
+
+                if (point.type === "solid") {
+                    ctx.fillStyle = "#FF0000"; // 实心点为红色
+                    ctx.fill();
+                } else {
+                    ctx.fillStyle = "#FFFFFF"; // 空心点填充为白色
+                    ctx.fill();
+                    ctx.strokeStyle = "#FF0000"; // 空心点边框为红色
+                    ctx.stroke();
+                }
+
+                // 显示点的名称
+                ctx.font = "12px Arial";
+                ctx.fillStyle = "black";
+                ctx.fillText(point.name, point.x + 10, point.y - 10);
+            });
+        }
+
+        draw(); // 初始绘制
+    </script>
+
+    <div class="spinner"></div>
+</body>
+</html>

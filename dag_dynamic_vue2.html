@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图形绘制</title>
+    <style>
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      
+        .spinner {
+          width: 20px;
+          height: 20px;
+          border: 5px solid #ccc;
+          border-top: 5px solid #000;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <canvas ref="myCanvas" width="400" height="400" style="border:1px solid #c1b8b8;">
+            Your browser does not support the HTML canvas tag.
+        </canvas>
+        
+        <div class="spinner"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                points: [
+                    { name: "A", x: 150, y: 110, type: "solid" },
+                    { name: "B", x: 70, y: 210, type: "solid" },
+                    { name: "C", x: 230, y: 210, type: "solid" },
+                    { name: "D", x: 150, y: 320, type: "hollow" },
+                ],
+                edges: [
+                    { from: "A", to: "B", style: "solid" },
+                    { from: "A", to: "C", style: "solid" },
+                    { from: "B", to: "D", style: "solid" },
+                    { from: "C", to: "D", style: "dashed" },
+                ],
+                currentColor: "#FF0000",
+                currentLineStyle: "solid",
+            },
+            methods: {
+                draw() {
+                    const canvas = this.$refs.myCanvas;
+                    const ctx = canvas.getContext("2d");
+
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    this.edges.forEach((edge) => {
+                        const fromPoint = this.points.find(point => point.name === edge.from);
+                        const toPoint = this.points.find(point => point.name === edge.to);
+
+                        ctx.beginPath();
+                        ctx.moveTo(fromPoint.x, fromPoint.y);
+                        ctx.lineTo(toPoint.x, toPoint.y);
+
+                        if (this.currentLineStyle === "solid") {
+                            ctx.setLineDash([]);
+                        } else {
+                            ctx.setLineDash([5, 5]);
+                        }
+
+                        ctx.strokeStyle = "#000000";
+                        ctx.stroke();
+                    });
+
+                    this.points.forEach((point) => {
+                        ctx.beginPath();
+                        ctx.arc(point.x, point.y, 4, 0, 2 * Math.PI);
+
+                        if (point.type === "solid") {
+                            ctx.fillStyle = this.currentColor;
+                            ctx.fill();
+                        } else {
+                            ctx.fillStyle = "#FFFFFF";
+                            ctx.fill();
+                            ctx.strokeStyle = this.currentColor;
+                            ctx.stroke();
+                        }
+
+                        ctx.font = "12px Arial";
+                        ctx.fillStyle = "black";
+                        ctx.fillText(point.name, point.x + 10, point.y - 10);
+                    });
+                },
+            },
+            mounted() {
+                // 定时切换颜色
+                setInterval(() => {
+                    this.currentColor = (this.currentColor === "#FF0000" ? "#00FF00" : "#FF0000");
+                    this.draw();
+                }, 200);
+
+                // 定时切换线条样式
+                setInterval(() => {
+                    this.currentLineStyle = (this.currentLineStyle === "solid" ? "dashed" : "solid");
+                    this.draw();
+                }, 100);
+
+                this.draw();
+            },
+        });
+    </script>
+</body>
+</html>

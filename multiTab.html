@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>动态新增Tab页 以及 内容</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .tab {
+            overflow: hidden;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .tab button {
+            background-color: inherit;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 16px;
+            color: #333;
+        }
+        .tab button:hover, .tab button.active {
+            background-color: #ddd;
+        }
+        .tabcontent {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="tab">
+</div>
+
+<script>
+let tabCounter = 0;
+
+function openTab(tabName) {
+    let i, tabcontent;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    const tablinks = document.querySelectorAll(".tab button");
+    tablinks.forEach(btn => btn.classList.remove("active"));
+    
+    document.getElementById(tabName).style.display = "block";
+    document.querySelector(`[data-target="${tabName}"]`).classList.add("active");
+}
+
+function addTab() {
+    tabCounter++;
+    const now = new Date();
+    const timeStamp = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+    const tabName = `Tab${tabCounter}`;
+    const newTabButton = document.createElement("button");
+    newTabButton.textContent = tabName;
+    newTabButton.setAttribute("data-target", tabName);
+    newTabButton.onclick = function() { openTab(tabName); };
+    
+    const newTabContent = document.createElement("div");
+    newTabContent.id = tabName;
+    newTabContent.className = "tabcontent";
+    newTabContent.innerHTML = `<h3>${tabName}</h3><p>内容 ${tabCounter} - ${timeStamp}</p>`;
+    
+    document.querySelector(".tab").appendChild(newTabButton);
+    document.body.appendChild(newTabContent);
+    
+    if (tabCounter === 1) {
+        // Automatically open the first tab
+        openTab(tabName);
+    }
+}
+
+function updateActiveTab() {
+    const activeTab = document.querySelector(".tabcontent[style*='display: block']");
+    if (activeTab) {
+        const now = new Date();
+        const timeStamp = getCurrentTimeString();
+        const newTimeRow = document.createElement("p");
+        newTimeRow.textContent = `当前时间: ${timeStamp}`;
+        activeTab.appendChild(newTimeRow);
+    }
+}
+
+function getCurrentTimeString() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+
+    // 将时间组件连接成一个字符串，并返回
+    return `${hours}:${minutes}:${seconds}`;
+}
+
+// 调用函数并打印结果
+console.log(getCurrentTimeString());
+
+
+setInterval(addTab, 3600*1000); // 每秒添加一个新的Tab页，带有当前时间戳
+setInterval(updateActiveTab, 1000);
+addTab()
+addTab()
+addTab()
+</script>
+
+</body>
+</html>
