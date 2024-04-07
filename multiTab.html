@@ -113,6 +113,15 @@ setInterval(updateActiveTab, 1000);
 addTab()
 addTab()
 addTab()
+
+const socket = new WebSocket('ws://192.168.31.45:8080/websocket');
+socket.onmessage = function(event) {
+    const receivedString = event.data;
+    console.log( "receivedString: ", receivedString );
+    addTab();
+    if (receivedString === 'abc') {
+    }
+};
 </script>
 
 </body>
