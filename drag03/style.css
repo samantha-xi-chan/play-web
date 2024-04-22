@@ -1,0 +1,15 @@
+#draggable-point {
+    width: 20px;
+    height: 20px;
+    background-color: blue;
+    position: absolute;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.line {
+    position: absolute;
+    height: 2px;
+    background-color: red;
+}
+

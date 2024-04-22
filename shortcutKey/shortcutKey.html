@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shortcut Key Example</title>
+<style>
+    .light-theme {
+        background-color: white;
+        color: black;
+    }
+    .dark-theme {
+        background-color: black;
+        color: white;
+    }
+</style>
+</head>
+<body class="light-theme">
+<p id="theme-description">当前主题: 浅色主题</p> <!-- 添加描述当前主题的文字段落 -->
+<script>
+    document.addEventListener('keydown', function(event) {
+        // 检查是否按下了Ctrl键和S键
+        if (event.ctrlKey && event.key === 's') {
+            event.preventDefault(); // 阻止默认行为
+            toggleTheme(); // 切换主题
+        }
+    });
+
+    function toggleTheme() {
+        var body = document.body;
+        var description = document.getElementById('theme-description'); // 获取描述段落的元素
+        // 切换body元素的类
+        if (body.classList.contains('light-theme')) {
+            body.classList.remove('light-theme');
+            body.classList.add('dark-theme');
+            description.textContent = '当前主题: 深色主题'; // 更新文本描述为“深色主题”
+        } else {
+            body.classList.remove('dark-theme');
+            body.classList.add('light-theme');
+            description.textContent = '当前主题: 浅色主题'; // 更新文本描述为“浅色主题”
+        }
+    }
+</script>
+</body>
+</html>
