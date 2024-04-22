@@ -12,3 +12,17 @@ canvas {
     border: 1px solid #ccc;
     background-color: #fff;
 }
+
+.toolbar {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+button, input[type=range], input[type=color] {
+    margin-right: 10px;
+}
