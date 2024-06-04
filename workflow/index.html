@@ -112,15 +112,15 @@
     <script>
         var states = [
             { id: 99, label: 'V0\nhhive-sql', class: 'type-freeze' },
-            { id: 1, label: 'V1\n数据同步', class: 'type-suss' },
-            { id: 2, label: 'V2\nhive-sql', class: 'type-suss' },
-            { id: 3, label: 'V3\nspark-sql', class: 'type-init' },
-            { id: 4, label: 'V4\nshell', class: 'type-ready' },
-            { id: 5, label: 'V5\npython', class: 'type-fail' },
-            { id: 6, label: 'V6\n虚节点', class: 'type-suss' },
-            { id: 7, label: 'V7\nspark-sql', class: 'type-suss' },
-            { id: 8, label: 'V8\nshell', class: 'type-freeze' },
-            { id: 9, label: 'V9\n数据同步', class: 'type-suss' },
+            { id: 51, label: 'V1\n数据同步', class: 'type-suss' },
+            { id: 52, label: 'V2\nhive-sql', class: 'type-suss' },
+            { id: 53, label: 'V3\nspark-sql', class: 'type-init' },
+            { id: 54, label: 'V4\nshell', class: 'type-ready' },
+            { id: 55, label: 'V5\npython', class: 'type-fail' },
+            { id: 56, label: 'V6\n虚节点', class: 'type-suss' },
+            { id: 57, label: 'V7\nspark-sql', class: 'type-suss' },
+            { id: 58, label: 'V8\nshell', class: 'type-freeze' },
+            { id: 59, label: 'V9\n数据同步', class: 'type-suss' },
             { id: 10, label: 'V10\nshell', class: 'type-queue' },
             { id: 11, label: 'V11\nspark-sql', class: 'type-run' },
             { id: 12, label: 'V12\nspark-sql', class: 'type-suss' },
@@ -130,20 +130,20 @@
         ];
 
         var edges = [
-            { start: 99, end: 1, option: {} },
-            { start: 1, end: 4, option: {} },
-            { start: 1, end: 3, option: {} },
-            { start: 1, end: 2, option: {} },
-            { start: 6, end: 7, option: {} },
-            { start: 5, end: 6, option: {} },
-            { start: 9, end: 10, option: {} },
-            { start: 8, end: 9, option: {} },
+            { start: 99, end: 51, option: {} },
+            { start: 51, end: 54, option: {} },
+            { start: 51, end: 53, option: {} },
+            { start: 51, end: 52, option: {} },
+            { start: 56, end: 57, option: {} },
+            { start: 55, end: 56, option: {} },
+            { start: 59, end: 10, option: {} },
+            { start: 58, end: 59, option: {} },
             { start: 11, end: 12, option: {} },
-            { start: 8, end: 11, option: {} },
-            { start: 5, end: 8, option: {} },
-            { start: 1, end: 5, option: {} },
+            { start: 58, end: 11, option: {} },
+            { start: 55, end: 58, option: {} },
+            { start: 51, end: 55, option: {} },
             { start: 13, end: 14, option: {} },
-            { start: 1, end: 13, option: {} },
+            { start: 51, end: 13, option: {} },
             { start: 10, end: 15, option: {} },
             { start: 12, end: 15, option: {} },
         ];
@@ -153,7 +153,7 @@
             .attr("class", "tooltip")
             .style("opacity", 0);
 
-        var statePoint = 1;
+        var statePoint = 51;
         diagGraph.init(statePoint, states, edges);
 
         var svgCanvas = document.getElementById('svgCanvas');
@@ -170,8 +170,8 @@
                 var element = e.target.parentNode;
                 tooltip.transition()
                     .duration(200)
-                    .style("opacity", .9);
-                tooltip.html(`ID: ${element.id}<br>Label: ${element.__data__.label}`)
+                    .style("opacity", .8);
+                tooltip.html(`ID: ${element.id}<br>Label: ${element.querySelector('tspan').textContent}`)
                     .style("left", (e.pageX + 5) + "px")
                     .style("top", (e.pageY - 28) + "px");
             }
@@ -179,7 +179,7 @@
 
         svgCanvas.addEventListener('mouseout', function (e) {
             if (e.target.tagName === 'rect') {
-                logEvent('mouseout', e.target.parentNode);
+                logEvent('mouseout-', e.target.parentNode);
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
@@ -187,7 +187,7 @@
         });
 
         function logEvent(eventName, element) {
-            console.log(`${eventName} event triggered on element with id: ${element.id}`);
+            console.log(`${eventName} event triggered on element with id = ${element.id} , label = ${element.querySelector('tspan').textContent}`);
         }
 
         var myMenu = document.getElementById("myMenu");
