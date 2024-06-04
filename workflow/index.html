@@ -158,7 +158,6 @@
 
         var svgCanvas = document.getElementById('svgCanvas');
         svgCanvas.addEventListener('click', function (e) {
-            e.preventDefault();
             if (e.target.tagName === 'rect') {
                 diagGraph.changePoint(e.target.parentNode.id);
             }
